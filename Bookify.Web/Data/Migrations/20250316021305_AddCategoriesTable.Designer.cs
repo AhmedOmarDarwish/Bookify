@@ -25,7 +25,7 @@ namespace Bookify.Web.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Bookify.Web.Core.Models.Category", b =>
+            modelBuilder.Entity("Bookify.Web.Core.Models.Model", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
