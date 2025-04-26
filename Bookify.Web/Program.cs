@@ -18,7 +18,8 @@ namespace Bookify.Web
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
-
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
+            builder.Services.AddExpressiveAnnotations();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

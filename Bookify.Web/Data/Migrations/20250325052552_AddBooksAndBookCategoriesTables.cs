@@ -15,7 +15,7 @@ namespace Bookify.Web.Data.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -31,7 +31,7 @@ namespace Bookify.Web.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.ID);
+                    table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Books_Authors_AuthorId",
                         column: x => x.AuthorId,
@@ -54,7 +54,7 @@ namespace Bookify.Web.Data.Migrations
                         name: "FK_BookCategories_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BookCategories_Categories_CategoryId",

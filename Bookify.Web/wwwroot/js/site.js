@@ -27,8 +27,12 @@ function showErrorMessage(message = 'Something went wrong!') {
     });
 }
 
+function disableSubmitButton() {
+    $('body :submit').attr('disabled', 'disabled').attr('data-kt-indicator', 'on');
+}
+
 function onModalBegin() {
-    $('body :submit').prop('disabled', true).attr("data-kt-indicator", "on");
+    disableSubmitButton();
 }
 
 function onModalSuccess(row) {
@@ -154,24 +158,71 @@ var KTDatatables = function () {
 }();
 
 $(document).ready(function () {
-    //SweetAlert
+
+    //Disable submit button
+    $('form').on('submit', function () { 
+        if ($('.js-tinymce').length > 0) {
+            $('.js-tinymce').each(function () {
+                var input = $(this);
+
+                var content = tinyMCE.get(input.attr('id')).getContent();
+                input.val(content);
+            });
+        }
+
+        var isValid = $(this).valid();
+        if (isValid) disableSubmitButton();
+    });
+
+
+    //TinyMCE
+    if ($('.js-tinymce').length > 0) {
+        var options = { selector: ".js-tinymce", height: "430" };
+
+        if (KTThemeMode.getMode() === "dark") {
+            options["skin"] = "oxide-dark";
+            options["content_css"] = "dark";
+        }
+        tinymce.init(options);
+    }
+
+
+    //Select2
+    $('.js-select2').select2();
+    $('.js-select2').on('select2:select', function (e) {
+        $('form').validate().element('#' + $(this).attr('id'));
+    });
+
+    //Datepicker
+    $('.js-datepicker').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true,
+        drops: 'up',
+        locale: {
+            format: 'DD/MM/YYYY'
+        },
+        maxDate: new Date()
+    });
+
+    // Display SweetAlert if message exists
     var messageElement = $('#Message');
     if (messageElement.length && messageElement.text().trim() !== '') {
         showSuccessMessage(messageElement.text());
     }
-    //DataTables
+
+    // Initialize DataTables
     KTUtil.onDOMContentLoaded(function () {
         KTDatatables.init();
     });
 
-    //Handle bootsstrap modal
-    $('body').delegate('.js-render-modal', 'click', function () {
+    // Handle Bootstrap Modal Rendering
+    $('body').on('click', '.js-render-modal', function () {
         var btn = $(this);
         var modal = $('#Modal');
         modal.find('#ModalLabel').text(btn.data('title'));
 
         if (btn.data('update') !== undefined) {
-            updatedRow = btn.parents('tr');
+            updatedRow = btn.closest('tr');
         }
 
         $.get({
@@ -180,64 +231,66 @@ $(document).ready(function () {
                 modal.find('.modal-body').html(form);
                 $.validator.unobtrusive.parse(modal);
 
+                // Reinitialize select2 & datepicker inside modal
+                modal.on('shown.bs.modal', function () {
+                    $('.js-select2').select2();
+                    $('.js-datepicker').daterangepicker({
+                        singleDatePicker: true,
+                        drops: 'auto',
+                    });
+                });
+
             },
             error: function () {
                 showErrorMessage();
             }
         });
+
         modal.modal('show');
     });
 
-    //Handel Toggle Status
-    $(document).ready(
-        function () {
-            $('body').delegate('.js-toggle-status', 'click',
-                function () {
-                    var btn = $(this);
+    // Handle Toggle Status
+    $('body').on('click', '.js-toggle-status', function () {
+        var btn = $(this);
 
-                    bootbox.confirm({
-                        message: "Are you sure that you need to toggle this item status?",
-                        buttons: {
-                            confirm: {
-                                label: 'Yes',
-                                className: 'btn-danger'
-                            },
-                            cancel: {
-                                label: 'No',
-                                className: 'btn-secondary'
-                            }
+        bootbox.confirm({
+            message: "Are you sure that you need to Delete this item?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-primary'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-secondary'
+                }
+            },
+            callback: function (result)
+            {
+                if (result) {
+                    $.post({
+                        url: btn.data('url'),
+                        data: {
+                            '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
                         },
-                        callback: function (result) {
-                            if (result) {
-                                $.post({
-                                    url: btn.data('url'),
-                                    data: {
-                                        '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                                    },
-                                    success: function (LastUpdatedOn) {
-                                        var row = btn.closest('tr'); // More optimized than parents('tr')
-                                        var status = row.find('.js-status');
-                                        var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
+                        success: function (LastUpdatedOn) {
+                            var row = btn.closest('tr');
+                            var status = row.find('.js-status');
+                            var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
 
-                                        // Update status text and styles
-                                        status.text(newStatus).toggleClass('badge-light-success badge-light-danger');
-                                        row.find('.js-updated-on').html(LastUpdatedOn);
-                                        row.addClass('animate__animated animate__flash');
+                            // Update status text and styles
+                            status.text(newStatus).toggleClass('badge-light-success badge-light-danger');
+                            row.find('.js-updated-on').html(LastUpdatedOn);
+                            row.addClass('animate__animated animate__flash');
 
-                                        //Use Sweet Alert From site.js
-                                        showSuccessMessage("Edit Successfully");
-
-                                    },
-                                    error: function () {
-                                        //Use Sweet Alert From site.js
-                                        showErrorMessage();
-
-                                    }
-                                });
-                            }
+                            showSuccessMessage("Edit Successfully");
+                        },
+                        error: function () {
+                            showErrorMessage();
                         }
                     });
-                });
-        }
-    );
+                }
+            }
+        });
+    });
 });

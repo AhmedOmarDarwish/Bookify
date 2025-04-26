@@ -6,12 +6,11 @@ namespace Bookify.Web.Core.Models
 
     public class Book : BasseModel
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(500)]
         public string Title { get; set; } = null!;
 
-        [MaxLength(200)]
         public string Description { get; set; } = null!;
 
         [MaxLength(200)]
@@ -20,6 +19,11 @@ namespace Bookify.Web.Core.Models
         public DateTime PublishingDate { get; set; }
 
         public string? ImageUrl { get; set; }
+
+        //For Image In Cloudinary
+        public string? ImageThumbnailUrl { get; set; }
+        public string? ImagePublicId { get; set; }
+         
 
         [MaxLength(50)]
         public string Hall { get; set; } = null!;
