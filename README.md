@@ -19,7 +19,7 @@
   <h2>🌟Technical-Focused Descriptions</h2>
   <ul>
     <li>Bookify – developed using ASP.NET Core MVC and SQL Server, offering a secure and scalable solution for booking management.</li>
-    <li>A full-stack application built with ASP.NET Core MVC, Entity Framework Core, and C#, integrating RESTful APIs for seamless data handling.</li>
+    <li>A full-stack application built with ASP.NET Core MVC, Entity Framework Core, and C#</li>
     <li>Bookify employs clean architecture principles, robust data validation, and role-based access control to ensure reliability and flexibility.</li>
     <li>Utilizes JavaScript, HTML5, and CSS3 for a responsive and user-friendly front-end experience.</li>
   </ul>
