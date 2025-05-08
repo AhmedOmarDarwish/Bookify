@@ -15,10 +15,8 @@ namespace Bookify.Web.Core.ViewModels
         public string Publisher { get; set; } = null!;
 
         [Display(Name = "Publishing Date")]
-        [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}", ApplyFormatInEditMode = true)]
-        [DataType(DataType.Date)]
-        [AssertThat("PublishingDate <= Today()", ErrorMessage = Errors.NotAllowFutureDates)]
-        public DateTime PublishingDate { get; set; } = DateTime.Today;
+       // [AssertThat("PublishingDate <= Today()", ErrorMessage = Errors.NotAllowFutureDates)]
+        public DateTime PublishingDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Book Cover")]
         public IFormFile? Image { get; set; }

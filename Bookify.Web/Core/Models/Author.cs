@@ -1,7 +1,7 @@
 ﻿namespace Bookify.Web.Core.Models
 {
     [Index(nameof(Name), IsUnique = true)]
-    public class Author : BasseModel
+    public class Author : BaseModel
     {
         public int Id { get; set; }
 

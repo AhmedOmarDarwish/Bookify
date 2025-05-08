@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookify.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250424050045_ChangeDescriptionColumInTableBook")]
+    [Migration("20250424050045_ChangeDescriptionColBooksTable")]
     partial class ChangeDescriptionColumInTableBook
     {
         /// <inheritdoc />

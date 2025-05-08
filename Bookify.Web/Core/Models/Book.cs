@@ -4,7 +4,7 @@ namespace Bookify.Web.Core.Models
 {
     [Index(nameof(Title), nameof(AuthorId), IsUnique = true)]
 
-    public class Book : BasseModel
+    public class Book : BaseModel
     {
         public int Id { get; set; }
 
@@ -34,6 +34,7 @@ namespace Bookify.Web.Core.Models
         public int AuthorId { get; set; }
         public Author? Author { get; set; }
 
+        public ICollection<BookCopy> Copies { get; set; } = new List<BookCopy>();
         public ICollection<BookCategory> Categories { get; set; } = new List<BookCategory>();
     }
 }

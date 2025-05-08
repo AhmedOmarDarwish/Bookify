@@ -15,7 +15,7 @@
             if (string.IsNullOrEmpty(ActiveWhen))
                 return;
 
-            var currentController = ViewContextData?.RouteData.Values["Controller"]?.ToString();
+            var currentController = ViewContextData?.RouteData.Values["controller"]?.ToString() ?? string.Empty;
 
             if (currentController!.Equals(ActiveWhen))
             {

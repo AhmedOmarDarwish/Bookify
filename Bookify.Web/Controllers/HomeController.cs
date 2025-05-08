@@ -2,6 +2,7 @@ using System.Diagnostics;
 
 namespace Bookify.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,6 +17,7 @@ namespace Bookify.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
