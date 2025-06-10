@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using System.Text.Encodings.Web;
-
-namespace Bookify.Web.Services
+﻿namespace Bookify.Web.Services
 {
 	public class EmailBodyBuilder : IEmailBodyBuilder
 	{
@@ -11,21 +8,18 @@ namespace Bookify.Web.Services
 		{
 			_webHostEnvironment = webHostEnvironment;
 		}
-
-		public string GetEmailBody(string imageUrl, string header, string body, string url, string linkTitle)
+        public string GetEmailBody(string template, Dictionary<string, string> placeholders)
 		{
-			var filePath = $"{_webHostEnvironment.WebRootPath}/templates/email.html";
+			var filePath = $"{_webHostEnvironment.WebRootPath}/templates/{template}.html";
 			StreamReader str = new(filePath);
 
-			var template = str.ReadToEnd();
+			var templateContent = str.ReadToEnd();
 			str.Close();
 
-			return template
-				.Replace("[imageUrl]", imageUrl)
-				.Replace("[header]", header)
-				.Replace("[body]", body)
-				.Replace("[url]", url)
-				.Replace("[linkTitle]", linkTitle);
+			foreach (var placeholder in placeholders)
+				templateContent = templateContent.Replace($"[{placeholder.Key}]", placeholder.Value);
+
+			return templateContent;
 		}
 	}
 }

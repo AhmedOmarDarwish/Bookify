@@ -1,0 +1,77 @@
+﻿@model IEnumerable<AreaViewModel>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
+
+@{
+    ViewData["Title"] = "Areas";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/plugins/datatables/datatables.bundle.css" />
+}
+<div class="alert  bg-light-primary border border-primary border-3 border-dashed d-flex justify-content-between flex-sm-row w-100 p-5 mb-10">
+    <!--begin::Icon-->
+    <div class="d-flex align-items-center">
+        <div class="symbol symbol-40px me-4">
+            <div class="symbol-label fs-2 fw-semibold text-success">
+                <!--begin::Svg Icon-->
+                <span class="svg-icon svg-icon-3x svg-icon-primary">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.3" d="M13.625 22H9.625V3C9.625 2.4 10.025 2 10.625 2H12.625C13.225 2 13.625 2.4 13.625 3V22Z" fill="currentColor" />
+                        <path d="M19.625 10H12.625V4H19.625L21.025 6.09998C21.325 6.59998 21.325 7.30005 21.025 7.80005L19.625 10Z" fill="currentColor" />
+                        <path d="M3.62499 16H10.625V10H3.62499L2.225 12.1001C1.925 12.6001 1.925 13.3 2.225 13.8L3.62499 16Z" fill="currentColor" />
+                    </svg>
+                </span>
+                <!--end::Svg Icon-->
+            </div>
+        </div>
+        <div class="d-flex flex-column pe-0 pe-sm10 ">
+            <h3 class="card-title">Areas</h3>
+        </div>
+    </div>
+    <div>
+        <a href="javascript:;" class="btn btn-sm btn-primary js-render-modal"
+           data-title="Add Area" data-url="/Areas/Create/">
+            <i class="bi bi-plus-square-dotted"></i>
+            Add
+        </a>
+    </div>
+    <!--end::Icon-->
+</div>
+
+<div class="card shadow-sm">
+    <partial name="_DataTablesCardHeader"/>
+    <div class="card-body pt-0">
+        <div class="table-responsive">
+            <table class="table table-row-gray300 gy-2 align-middle js-datatables" data-document-title="Governorates">
+                <thead>
+                    <tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200">
+                        <th>Name</th>
+                        <th>Governorate</th>
+                        <th>Status</th>
+                        <th>Created On</th>
+                        <th>Last Updated On</th>
+                        <th class="js-no-export">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var area in Model)
+                    {
+                        <partial name="_AreaRow" model="@area" />
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+<input type="hidden" name="__RequestVerificationToken" value="@antiforgery.GetAndStoreTokens(Context).RequestToken" />
+
+@* @Html.AntiForgeryToken() *@
+
+@section Plugins {
+    <script src="~/assets/plugins/datatables/datatables.bundle.js"></script>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" /> 
+}

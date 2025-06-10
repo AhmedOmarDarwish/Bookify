@@ -59,10 +59,26 @@ function onModalComplete() {
 }
 
 //Select2
+//function applySelect2() {
+//    $('.js-select2').select2();
+//    $('.js-select2').on('select2:select', function (e) {
+//        $('form').not('#SignOut').validate().element('#' + $(this).attr('id'));
+//    });
+//}
+
 function applySelect2() {
-    $('.js-select2').select2();
-    $('.js-select2').on('select2:select', function (e) {
-        $('form').not('#SignOut').validate().element('#' + $(this).attr('id'));
+    $('.js-select2').each(function () {
+        const $select = $(this);
+        const $modal = $select.closest('.modal'); // Check if it's inside a modal
+
+        $select.select2({
+            width: '100%',
+            dropdownParent: $modal.length ? $modal : $(document.body)
+        });
+
+        $select.on('select2:select', function () {
+            $('form').not('#SignOut').validate().element('#' + $(this).attr('id'));
+        });
     });
 }
 

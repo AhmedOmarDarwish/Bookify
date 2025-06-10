@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using CloudinaryDotNet;
 
 namespace Bookify.Web.Areas.Identity.Pages.Account
 {
@@ -74,12 +75,18 @@ namespace Bookify.Web.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
+                var placeholders = new Dictionary<string, string>()
+                {
+                    {"imageUrl", "https://res.cloudinary.com/dzih8mp3o/image/upload/icon-positive-vote-2_jcxdww_o1romu_vvfh0m.png"},
+                    {"header", $"Hey {user.FullName},"},
+                    {"body", "please click the below button to reset you password"},
+                    {"url", $"{HtmlEncoder.Default.Encode(callbackUrl!)}"},
+                    {"linkTitle", "Reset Password"},
+                };
+                
                 var body = _emailBodyBuilder.GetEmailBody(
-                "https://res.cloudinary.com/dzih8mp3o/image/upload/icon-positive-vote-2_jcxdww_o1romu_vvfh0m.png",
-                        $"Hey {user.FullName},",
-                        "please click the below button to reset you password",
-                        $"{HtmlEncoder.Default.Encode(callbackUrl!)}",
-                        "Reset Password"
+                    EmailTemplate.Email,
+                    placeholders
                 );
 
                 await _emailSender.SendEmailAsync(

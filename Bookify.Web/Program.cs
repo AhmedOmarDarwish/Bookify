@@ -25,6 +25,8 @@ namespace Bookify.Web
             builder.Services.Configure<SecurityStampValidatorOptions>(
                 options => options.ValidationInterval = TimeSpan.Zero);
 
+            builder.Services.AddDataProtection().SetApplicationName(nameof(Bookify));
+
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
             builder.Services.AddTransient<IImageService, ImageService>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -36,7 +38,9 @@ namespace Bookify.Web
             builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
-           
+
+            builder.Services.AddWhatsAppApiClient(builder.Configuration);
+
             builder.Services.AddExpressiveAnnotations();
             var app = builder.Build();
 

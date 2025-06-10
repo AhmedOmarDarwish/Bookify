@@ -11,9 +11,6 @@ global using Bookify.Web.Core.Consts;
 global using Bookify.Web.Helpers;
 global using Bookify.Web.Services;
 
-
-
-
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Mvc;
@@ -26,14 +23,14 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Identity.UI.Services;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Options;
-
+global using Microsoft.AspNetCore.DataProtection;
 
 global using System.ComponentModel.DataAnnotations;
 global using System.Reflection;
 global using System.Linq.Dynamic.Core;
 global using System.Security.Claims;
 global using System.Net.Mail;
-
+global using System.Net;
 
 global using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 global using UoN.ExpressiveAnnotations.NetCore.Attributes;
@@ -41,7 +38,13 @@ global using UoN.ExpressiveAnnotations.NetCore.Attributes;
 global using CloudinaryDotNet;
 global using CloudinaryDotNet.Actions;
 
-
 global using SixLabors.ImageSharp;
 global using SixLabors.ImageSharp.Processing;
+
+global using WhatsAppCloudApi.Extensions;
+global using WhatsAppCloudApi.Services;
+global using WhatsAppCloudApi;
+
+
+
 

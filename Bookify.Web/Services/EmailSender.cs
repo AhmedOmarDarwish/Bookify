@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Options;
-using System.Net;
-using System.Net.Mail;
-
-namespace Bookify.Web.Services
+﻿namespace Bookify.Web.Services
 {
     public class EmailSender : IEmailSender
     {

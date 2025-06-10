@@ -20,8 +20,9 @@ namespace Bookify.Web.Core.Models
 
         public string? ImageUrl { get; set; }
 
-        //For Image In Cloudinary
         public string? ImageThumbnailUrl { get; set; }
+
+        //For Image In Cloudinary
         public string? ImagePublicId { get; set; }
          
 

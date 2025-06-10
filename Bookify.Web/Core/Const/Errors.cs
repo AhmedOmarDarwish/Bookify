@@ -7,6 +7,7 @@
         public const string MaxMinLength = "The {0} must be at least {2} and at max {1} characters long.";
         public const string Duplicated = "Another record with the same {0} is already exists!";
         public const string DuplicatedBook = "Book with the same title is already exists with the same author!";
+        public const string DuplicatedArea= "Area with the same title is already exists with the same Governorate!";
         public const string NotAllowedExtension = "Only .png, .jpg, .jpeg files are allowed!";
         public const string MaxSize = "File cannot be more that 2 MB!";
         public const string NotAllowFutureDates = "Date cannot be in the future!";

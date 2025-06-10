@@ -39,8 +39,8 @@
         [HttpPost]
         public IActionResult GetBooks()
         {
-            var skip = int.Parse(Request.Form["start"]!);
-            var pageSize = int.Parse(Request.Form["length"]!);
+            var skip = int.Parse(Request.Form["start"]);
+            var pageSize = int.Parse(Request.Form["length"]);
 
             var searchValue = Request.Form["search[value]"];
 
@@ -54,7 +54,7 @@
                 .ThenInclude(c => c.Category);
 
             if (!string.IsNullOrEmpty(searchValue))
-                books = books.Where(b => b.Title.Contains(searchValue!) || b.Author!.Name.Contains(searchValue!));
+                books = books.Where(b => b.Title.Contains(searchValue) || b.Author!.Name.Contains(searchValue));
 
             books = books.OrderBy($"{sortColumn} {sortColumnDirection}");
 
@@ -103,8 +103,9 @@
             if (model.Image is not null)
             {
                 var imageName = $"{Guid.NewGuid()}{Path.GetExtension(model.Image.FileName)}";
+                var imagePath = "/images/books";
 
-                var (isUploaded, errorMessage) = await _imageService.UploadAsync(model.Image, imageName, "/images/books", hasThumbnail: true);
+                var (isUploaded, errorMessage) = await _imageService.UploadAsync(model.Image, imageName, imagePath, hasThumbnail: true);
 
                 if (!isUploaded)
                 {
@@ -113,8 +114,8 @@
 
                 }
 
-                book.ImageUrl = $"/images/books/{imageName}";
-                book.ImageThumbnailUrl = $"/images/books/thumb/{imageName}";
+                book.ImageUrl = $"{imagePath}/{imageName}";
+                book.ImageThumbnailUrl = $"{imagePath}/thumb/{imageName}";
 
                 //using var straem = model.Image.OpenReadStream();
 
@@ -184,8 +185,9 @@
                 }
 
                 var imageName = $"{Guid.NewGuid()}{Path.GetExtension(model.Image.FileName)}";
+                var imagePath = "/images/books";
 
-                var (isUploaded, errorMessage) = await _imageService.UploadAsync(model.Image, imageName, "/images/books", hasThumbnail: true);
+                var (isUploaded, errorMessage) = await _imageService.UploadAsync(model.Image, imageName, imagePath, hasThumbnail: true);
 
                 if (!isUploaded)
                 {
@@ -193,8 +195,8 @@
                     return View("Form", PopulateViewModel(model));
                 }
 
-                model.ImageUrl = $"/images/books/{imageName}";
-                model.ImageThumbnailUrl = $"/images/books/thumb/{imageName}";
+                model.ImageUrl = $"{imagePath}/{imageName}";
+                model.ImageThumbnailUrl = $"{imagePath}/thumb/{imageName}";
 
                 //using var straem = model.Image.OpenReadStream();
 
