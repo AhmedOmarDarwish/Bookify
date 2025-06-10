@@ -29,3 +29,36 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Start Override theme */
+.form-floating > .form-select{
+    padding-bottom: 0.225rem
+}
+/* End Override theme */
+
+/* Start Override Bootbox */
+
+.bootbox-close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5rem 0.75rem;
+    z-index: 1;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}
+
+/* End Override Bootbox */
+
+/* Start Custom Styles */
+
+.dt-spinner + div {
+    display: none !important;
+}
+
+.h-70px {
+    height: 70px !important;
+}
+
+/* End Custom Styles */

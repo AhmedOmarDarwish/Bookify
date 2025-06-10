@@ -1060,7 +1060,7 @@ $.extend( $.validator, {
 				.filter( selector );
 		},
 
-		// See https://api.jquery.com/category/selectors/, for CSS
+		// See https://api.jquery.com/Model/selectors/, for CSS
 		// meta-characters that should be escaped in order to be used with JQuery
 		// as a literal part of a name/id or any selector.
 		escapeCssMeta: function( string ) {
