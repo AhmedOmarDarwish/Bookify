@@ -1,5 +1,6 @@
 ﻿namespace Bookify.Web.Controllers
 {
+    [Authorize(Roles = AppRoles.Reception)]
     public class SubscribersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -66,6 +67,8 @@
                 .Include(s => s.Governorate)
                 .Include(s => s.Area)
                 .Include(s => s.Subscriptions)
+                .Include(s => s.Rentals)
+                .ThenInclude(r => r.RentalCopies)
                 .SingleOrDefault(s => s.Id == subscriberId);
 
             if (subscriber is null)
@@ -126,11 +129,14 @@
                 { "body", "Thanks for joining Bookify 🤩" }
             };
 
-            var body = _emailBodyBuilder.GetEmailBody(EmailTemplate.Notification, placeholders);
+            var body = _emailBodyBuilder.GetEmailBody(EmailTemplates.Notification, placeholders);
 
-            await _emailSender.SendEmailAsync(
+            //Use HangFire Service
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(
                 model.Email,
-                "Welcome to Bookify", body);
+                "Welcome to Bookify", body)
+            );
+
 
 
             //Send welcome message using WhatsApp
@@ -150,8 +156,9 @@
 
                 var mobileNumber = _webHostEnvironment.IsDevelopment() ? "01229590598" : model.MobileNumber;
 
-                await _whatsAppClient.SendMessage($"2{mobileNumber}", WhatsAppLanguageCode.Arabic,
-                    WhatsAppTemplates.WelcomeMessage  ,components);
+                //Use HangFire Service
+                BackgroundJob.Enqueue(() => _whatsAppClient.SendMessage($"2{mobileNumber}", WhatsAppLanguageCode.Arabic,
+                    WhatsAppTemplates.WelcomeMessage, components));
             }
 
             var subscriberId = _dataProtector.Protect(subscriber.Id.ToString());
@@ -225,7 +232,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RenewSubscription(string sKey)
+        public IActionResult RenewSubscription(string sKey)
         {
             var subscriberId = int.Parse(_dataProtector.Unprotect(sKey));
             var subscriber = _context.Subscribers.Include(s => s.Subscriptions).SingleOrDefault(s => s.Id == subscriberId);
@@ -236,8 +243,20 @@
             if (subscriber.IsBlackListed)
                 return BadRequest();
 
-            var lastSubscription = subscriber.Subscriptions.Last();
-            var startDate = lastSubscription.EndDate < DateTime.Today ? DateTime.Today : lastSubscription.EndDate.AddDays(1);
+            var lastSubscription = subscriber.Subscriptions?.LastOrDefault();
+            DateTime startDate;
+
+            if (lastSubscription is not null)
+            {
+                startDate = lastSubscription.EndDate < DateTime.Today
+                    ? DateTime.Today
+                    : lastSubscription.EndDate.AddDays(1);
+            }
+            else
+            {
+                startDate = DateTime.Today;
+            }
+
             Subscription newSubscription = new()
             {
                 CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value,
@@ -246,7 +265,7 @@
                 EndDate = startDate.AddYears(1),
             };
 
-            subscriber.Subscriptions.Add(newSubscription);
+            subscriber.Subscriptions!.Add(newSubscription);
             _context.SaveChanges();
 
             //Send email and WhatsApp Message
@@ -259,12 +278,13 @@
                 { "body", $"your subscription has been renewed through {newSubscription.EndDate.ToString("d MMM, yyyy")} 🎉🎉" }
             };
 
-            var body = _emailBodyBuilder.GetEmailBody(EmailTemplate.Notification, placeholders);
+            var body = _emailBodyBuilder.GetEmailBody(EmailTemplates.Notification, placeholders);
 
-             await _emailSender.SendEmailAsync(
+            //Use HangFire Service
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(
                 subscriber.Email,
-                "Bookify Subscription Renewal", body);
-
+                "Bookify Subscription Renewal", body)
+            );
 
             //Send welcome message using WhatsApp
             if (subscriber.HasWhatsApp)
@@ -284,18 +304,13 @@
 
                 var mobileNumber = _webHostEnvironment.IsDevelopment() ? "01229590598" : subscriber.MobileNumber;
 
-                await _whatsAppClient.SendMessage($"2{mobileNumber}", WhatsAppLanguageCode.Arabic,
-                    WhatsAppTemplates.SubscriptionRenew, components);
+                //Use HangFire Service
+                BackgroundJob.Enqueue(() => _whatsAppClient.SendMessage($"2{mobileNumber}", WhatsAppLanguageCode.Arabic,
+                    WhatsAppTemplates.SubscriptionRenew, components));
             }
 
-
-
-
-
             var viewModel = _mapper.Map<SubscriptionViewModel>(newSubscription);
-
             return PartialView("_SubscriptionRow", viewModel);
-
         }
 
         [AjaxOnly]

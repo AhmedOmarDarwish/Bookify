@@ -2,11 +2,25 @@
 
 @{
 	ViewData["Title"] = "Subscriber Details";
+	var lastSubscription = Model.Subscriptions?.LastOrDefault(); // Safely gets the last subscription
+	var subscriberStatus = SubscriberStatus.Inactive;
+	var statusClass = "warning";
 
-	var lastSubscription = Model.Subscriptions.Last();
-	var subscriberStatus = Model.IsBlackListed ? SubscriberStatus.Banned : lastSubscription.EndDate < DateTime.Today ? SubscriberStatus.Inactive : SubscriberStatus.Active;
-	var statusClass = Model.IsBlackListed ? "danger" : lastSubscription.EndDate < DateTime.Today ? "warning" : "success";
+	if (Model.IsBlackListed)
+	{
+		subscriberStatus = SubscriberStatus.Banned;
+		statusClass = "danger";
+	}
+	else if (lastSubscription != null && lastSubscription.EndDate >= DateTime.Today)
+	{
+		subscriberStatus = SubscriberStatus.Active;
+		statusClass = "success";
+	}
 }
+@* 	 var lastSubscription = Model.Subscriptions.Last();
+	var subscriberStatus = Model.IsBlackListed ? SubscriberStatus.Banned : lastSubscription.EndDate < DateTime.Today ? SubscriberStatus.Inactive : SubscriberStatus.Active;
+	var statusClass = Model.IsBlackListed ? "danger" : lastSubscription.EndDate < DateTime.Today ? "warning" : "success"; *@
+
 
 <div class="alert bg-light-primary border border-primary border-3 border-dashed d-flex justify-content-between w-100 p-5 mb-10">
     <div class="d-flex align-items-center">
@@ -90,7 +104,7 @@
 					<!--begin::Details item-->
 					<div class="fw-bold mt-5">Date of Birth</div>
 					<div class="text-gray-600">
-						<p class="text-gray-600 text-hover-primary">@Model.DateOfBirth</p>
+						<p class="text-gray-600 text-hover-primary">@Model.DateOfBirth.ToString("dd MMM, yyyy")</p>
 					</div>
 					<!--begin::Details item-->
 					<!--begin::Details item-->
@@ -135,7 +149,7 @@
 							<div class="card-header border-0">
 								<!--begin::Card title-->
 								<div class="card-title">
-									<h2 class="fw-bold">Reward Points</h2>
+									<h2 class="fw-bold"># of Rentals</h2>
 								</div>
 								<!--end::Card title-->
 							</div>
@@ -151,10 +165,11 @@
 											</svg>
 										</span>
 										<!--end::Svg Icon-->
-										<div class="ms-2">4,571 
-										<span class="text-muted fs-4 fw-semibold">Points earned</span></div>
+										<div class="ms-2">
+											<span id="TotalCopies">@Model.Rentals.Sum(r => r.NumberOfCopies)</span>
+										</div>
 									</div>
-									<div class="fs-7 fw-normal text-muted">Earn reward points with every purchase.</div>
+									<div class="fs-7 fw-normal text-muted">Total Number of copies.</div>
 								</div>
 							</div>
 							<!--end::Card body-->
@@ -249,24 +264,34 @@
 			<!--end:::Tab pane-->
 			<!--begin:::Tab pane-->
 			<div class="tab-pane fade" id="Rentals" role="tabpanel">
-				<!--begin::Card-->
-				<div class="card pt-4 mb-6 mb-xl-9">
-					<!--begin::Card header-->
-					<div class="card-header border-0">
-						<!--begin::Card title-->
-						<div class="card-title">
-							<h2>Rentals</h2>
+					<!--begin::Card-->
+					<div class="card pt-4 mb-6 mb-xl-9">
+						<!--begin::Card header-->
+						<div class="card-header border-0 pt-5">
+							<h3 class="card-title align-items-start flex-column">
+								<span class="card-label fw-bold fs-3 mb-1">Rentals</span>
+							</h3>
+							@if (!Model.IsBlackListed)
+							{
+							<div id="RentalButton" class="card-toolbar @(lastSubscription.EndDate < DateTime.Today.AddDays((int)RentalsConfigurations.RentalDuration) ? "d-none" : string.Empty)">
+								<a asp-controller="Rentals" asp-action="Create" asp-route-sKey="@Model.Key" class="btn btn-sm btn-light-primary">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path opacity="0.3" d="M3 13V11C3 10.4 3.4 10 4 10H20C20.6 10 21 10.4 21 11V13C21 13.6 20.6 14 20 14H4C3.4 14 3 13.6 3 13Z" fill="currentColor" />
+										<path d="M13 21H11C10.4 21 10 20.6 10 20V4C10 3.4 10.4 3 11 3H13C13.6 3 14 3.4 14 4V20C14 20.6 13.6 21 13 21Z" fill="currentColor" />
+									</svg>
+										Add Rental
+									</a>
+								</div>
+							}
 						</div>
-						<!--end::Card title-->
+						<!--end::Card header-->
+						<!--begin::Card body-->
+						<div class="card-body py-3 ">
+							<partial name="_Rentals" model="@Model.Rentals"/>
+						</div>
+						<!--end::Card body-->
 					</div>
-					<!--end::Card header-->
-					<!--begin::Card body-->
-					<div class="card-body pt-0 pb-5">
-						Rentals will be shown here
-					</div>
-					<!--end::Card body-->
-				</div>
-				<!--end::Card-->
+					<!--end::Card-->
 			</div>
 			<!--end:::Tab pane-->
 		</div>
@@ -276,7 +301,7 @@
 </div>
 @section Scripts
 {
-	<script src="~/js/renew.js" asp-append-version="true"></script>
+	<script src="~/js/subscriber-details.js" asp-append-version="true"></script>
 }
 @section Plugins
 {

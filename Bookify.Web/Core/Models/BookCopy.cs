@@ -14,5 +14,8 @@
 
         public Book? Book { get; set; }
 
+        public ICollection<RentalCopy> Rentals { get; set; } = new List<RentalCopy>();
+
+
     }
 }

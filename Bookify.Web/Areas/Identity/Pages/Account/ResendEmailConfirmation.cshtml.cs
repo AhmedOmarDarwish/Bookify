@@ -96,7 +96,7 @@ namespace Bookify.Web.Areas.Identity.Pages.Account
                 };
 
             var body = _emailBodyBuilder.GetEmailBody(
-                EmailTemplate.Email,
+                EmailTemplates.Email,
                 placeholders
             );
 

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Encodings.Web;
 using System.Text;
 
@@ -89,7 +88,7 @@ namespace Bookify.Web.Controllers
                 };
 
                 var body = _emailBodyBuilder.GetEmailBody(
-                    EmailTemplate.Email,
+                    EmailTemplates.Email,
                     placeholders
                 );
 

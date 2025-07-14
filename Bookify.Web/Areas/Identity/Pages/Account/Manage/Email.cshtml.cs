@@ -147,7 +147,7 @@ namespace Bookify.Web.Areas.Identity.Pages.Account.Manage
                 };
 
                 var body = _emailBodyBuilder.GetEmailBody(
-                    EmailTemplate.Email,
+                    EmailTemplates.Email,
                     placeholders
                 );
 
@@ -197,7 +197,7 @@ namespace Bookify.Web.Areas.Identity.Pages.Account.Manage
                 };
 
             var body = _emailBodyBuilder.GetEmailBody(
-                EmailTemplate.Email,
+                EmailTemplates.Email,
                 placeholders
             );
 

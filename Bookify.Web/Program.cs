@@ -1,3 +1,5 @@
+using Bookify.Web.Tasks;
+using Hangfire.Dashboard;
 
 namespace Bookify.Web
 {
@@ -38,10 +40,21 @@ namespace Bookify.Web
             builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
-
             builder.Services.AddWhatsAppApiClient(builder.Configuration);
 
             builder.Services.AddExpressiveAnnotations();
+
+            builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+            builder.Services.AddHangfireServer();
+
+            builder.Services.Configure<AuthorizationOptions>(
+                options => options.AddPolicy("AdminsOnly", policy => 
+                { 
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole(AppRoles.Admin);
+                }
+                ));
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -62,6 +75,7 @@ namespace Bookify.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //Add Seed User and Roles
             var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 
             using var scope = scopeFactory.CreateScope();
@@ -71,6 +85,39 @@ namespace Bookify.Web
 
             await DefaultRoles.SeedAsync(roleManger);
             await DefaultUsers.SeedAdminUserAsync(userManger);
+
+            //hangfire
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                DashboardTitle = "Bookify Dashboard",
+                //IsReadOnlyFunc = (DashboardContext context) => true,
+                Authorization = new IDashboardAuthorizationFilter[]
+                {
+                     new HangfireAuthorizationFilter("AdminsOnly")
+                }
+            });
+
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+            var whatsAppClient = scope.ServiceProvider.GetRequiredService<IWhatsAppClient>();
+            var emailBodyBuilder = scope.ServiceProvider.GetRequiredService<IEmailBodyBuilder>();
+            var emailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
+
+            var hangfireTasks = new HangfireTasks(dbContext, webHostEnvironment, whatsAppClient,
+                emailBodyBuilder, emailSender);
+
+            RecurringJob.AddOrUpdate(
+                "prepare-expiration-alert",
+                () => hangfireTasks.PrepareExpirationAlert(),
+                Cron.Daily(14), // 2 PM daily (cleaner than raw cron)
+                new RecurringJobOptions { TimeZone = TimeZoneInfo.Local }
+            );
+            RecurringJob.AddOrUpdate(
+                "rentals-expiration-alert",
+                () => hangfireTasks.RentalsExpirationAlert(),
+                Cron.Daily(14), // 2 PM daily (cleaner than raw cron)
+                new RecurringJobOptions { TimeZone = TimeZoneInfo.Local }
+            );
 
             app.MapStaticAssets();
             app.MapControllerRoute(

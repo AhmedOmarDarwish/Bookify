@@ -1,5 +1,6 @@
 ﻿global using AutoMapper;
 global using Bookify.Web.Core.Const;
+global using Bookify.Web.Core.Enums;
 global using Bookify.Web.Core.Mapping;
 global using Bookify.Web.Core.Models;
 global using Bookify.Web.Core.ViewModels;
@@ -44,6 +45,10 @@ global using SixLabors.ImageSharp.Processing;
 global using WhatsAppCloudApi.Extensions;
 global using WhatsAppCloudApi.Services;
 global using WhatsAppCloudApi;
+
+global using Hangfire;
+global using Hangfire.Annotations;
+global using Hangfire.Dashboard;
 
 
 
