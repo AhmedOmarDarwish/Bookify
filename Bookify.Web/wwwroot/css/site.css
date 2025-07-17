@@ -51,6 +51,27 @@ body {
 
 /* End Override Bootbox */
 
+/* Start Override typeahead */
+.twitter-typeahead {
+    width: 100%;
+}
+
+.tt-suggestion {
+    font-size: 16px;
+}
+
+    .tt-suggestion:not(:last-child) {
+        border-bottom: 1px dashed #dcdcdc;
+    }
+
+/*.tt-suggestion:hover,
+.tt-suggestion:focus {
+    background-color: #dcdcdc;
+}*/
+
+
+/* End Override typeahead */
+
 /* Start Custom Styles */
 
 .dt-spinner + div {
@@ -79,4 +100,33 @@ body {
     font-family: 'Satisfy', cursive;
 }
 
+
+.page-bg {
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(../assets/images/bg9-dark.jpg);
+}
+
+.mh-450px {
+    min-height: 450px;
+}
+
+.launcher .sidebar {
+    position: fixed;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 425px;
+    top: 50px;
+    right: 50px;
+    bottom: 50px;
+    background-color: rgba(19,0,97,.3);
+    border-radius: 1.75rem;
+}
+
+.transform-x {
+    transform: scaleX(-1);
+}
 /* End Custom Styles */

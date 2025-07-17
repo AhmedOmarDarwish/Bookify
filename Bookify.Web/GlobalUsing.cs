@@ -50,6 +50,8 @@ global using Hangfire;
 global using Hangfire.Annotations;
 global using Hangfire.Dashboard;
 
+global using HashidsNet;
+global using System.Diagnostics;
 
 
 

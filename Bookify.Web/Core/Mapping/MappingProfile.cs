@@ -5,12 +5,11 @@
         public MappingProfile()
         {
             //Categories
-            CreateMap<Category, CategoryViewModel>();                   //Category to CategoryViewModel
+            CreateMap<Category, CategoryViewModel>();
             CreateMap<CategoryFormViewModel, Category>().ReverseMap();
             CreateMap<Category, SelectListItem>()
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
-
 
             //Authors
             CreateMap<Author, AuthorViewModel>();
@@ -29,7 +28,6 @@
                 .ForMember(dest => dest.Categories,
                     opt => opt.MapFrom(src => src.Categories.Select(c => c.Category!.Name).ToList()));
 
-            //BookCopy
             CreateMap<BookCopy, BookCopyViewModel>()
                 .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book!.Title))
                 .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Book!.Id))
@@ -37,21 +35,18 @@
 
             CreateMap<BookCopy, BookCopyFormViewModel>();
 
+            //Users
+            CreateMap<ApplicationUser, UserViewModel>();
+            CreateMap<UserFormViewModel, ApplicationUser>()
+                .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(src => src.Email.ToUpper()))
+                .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => src.UserName.ToUpper()))
+                .ReverseMap();
 
-            //Governorates
-            CreateMap<Governorate, GovernorateViewModel>();
-            CreateMap<GovernorateFormViewModel, Governorate>().ReverseMap();
+            //Governorates & Areas
             CreateMap<Governorate, SelectListItem>()
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
 
-
-            //Areas
-            CreateMap<Area, AreaViewModel>()
-                 .ForMember(dest => dest.Governorate, opt => opt.MapFrom(src => src.Governorate!.Name));
-
-            CreateMap<AreaFormViewModel, Area>().ReverseMap().ForMember(dest => dest.Governorates, opt => opt.Ignore());
-            ;
             CreateMap<Area, SelectListItem>()
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
@@ -69,15 +64,8 @@
 
             CreateMap<Subscription, SubscriptionViewModel>();
 
-            //Users
-            CreateMap<ApplicationUser, UserViewModel>();
-            CreateMap<UserFormViewModel, ApplicationUser>()
-                .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(src => src.Email.ToUpper()))
-                .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => src.UserName.ToUpper()))
-                .ReverseMap();
             //Rentals
             CreateMap<Rental, RentalViewModel>();
-            CreateMap<RentalCopy, RentalCopyViewModel>();
             CreateMap<RentalCopy, RentalCopyViewModel>();
             CreateMap<RentalCopy, CopyHistoryViewModel>()
                 .ForMember(dest => dest.SubscriberMobile, opt => opt.MapFrom(src => src.Rental!.Subscriber!.MobileNumber))

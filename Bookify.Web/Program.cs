@@ -28,6 +28,7 @@ namespace Bookify.Web
                 options => options.ValidationInterval = TimeSpan.Zero);
 
             builder.Services.AddDataProtection().SetApplicationName(nameof(Bookify));
+            builder.Services.AddSingleton<IHashids>(_ => new Hashids("f1nd1ngn3m0", minHashLength: 11));
 
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
             builder.Services.AddTransient<IImageService, ImageService>();
