@@ -1,5 +1,6 @@
 using Bookify.Web.Tasks;
 using Hangfire.Dashboard;
+using ViewToHTML.Extensions;
 
 namespace Bookify.Web
 {
@@ -55,7 +56,8 @@ namespace Bookify.Web
                     policy.RequireRole(AppRoles.Admin);
                 }
                 ));
-            
+            builder.Services.AddViewToHTML();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="CloudinaryDotNet" Version="1.27.5" />
     <PackageReference Include="Hangfire" Version="1.8.20" />
     <PackageReference Include="Hashids.net" Version="1.7.0" />
@@ -24,9 +25,13 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="OpenHtmlToPdf.netcore" Version="1.13.0" />
     <PackageReference Include="SixLabors.ImageSharp.Web" Version="3.1.4" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.2" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.2" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="4.7.1" />
     <PackageReference Include="UoN.ExpressiveAnnotations.NetCore" Version="1.0.0" />
+    <PackageReference Include="ViewToHTML" Version="1.0.0" />
     <PackageReference Include="WhatsAppCloudApi" Version="1.0.0" />
   </ItemGroup>
 

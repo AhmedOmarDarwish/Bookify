@@ -11,6 +11,9 @@ global using Bookify.Web.Seeds;
 global using Bookify.Web.Core.Consts;
 global using Bookify.Web.Helpers;
 global using Bookify.Web.Services;
+global using Bookify.Web.Core.Utilities;
+global using Bookify.Web.Extensions;
+
 
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -52,6 +55,13 @@ global using Hangfire.Dashboard;
 
 global using HashidsNet;
 global using System.Diagnostics;
+
+global using ClosedXML.Excel;
+global using System.Net.Mime;
+global using ViewToHTML.Services;
+global using OpenHtmlToPdf;
+
+
 
 
 
