@@ -53,6 +53,9 @@ namespace Bookify.Web
                 }
                 ));
             builder.Services.AddViewToHTML();
+            builder.Services.AddMvc(options =>
+              options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())
+            );
 
             //Add Serilog
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
@@ -87,6 +90,18 @@ namespace Bookify.Web
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                Secure = CookieSecurePolicy.Always
+            });
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Frame-Options", "Deny");
+
+                await next();
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();
