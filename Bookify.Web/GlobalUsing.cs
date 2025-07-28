@@ -13,7 +13,9 @@ global using Bookify.Web.Helpers;
 global using Bookify.Web.Services;
 global using Bookify.Web.Core.Utilities;
 global using Bookify.Web.Extensions;
-
+global using Bookify.Web.Tasks;
+global using Serilog;
+global using ViewToHTML.Extensions;
 
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

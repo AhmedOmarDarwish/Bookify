@@ -42,14 +42,23 @@
                 .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => src.UserName.ToUpper()))
                 .ReverseMap();
 
-            //Governorates & Areas
+            //Governorates
+            CreateMap<Governorate, GovernorateViewModel>();
+            CreateMap<GovernorateFormViewModel, Governorate>().ReverseMap();
             CreateMap<Governorate, SelectListItem>()
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
 
+            //Areas
+            CreateMap<Area, AreaViewModel>()
+                 .ForMember(dest => dest.Governorate, opt => opt.MapFrom(src => src.Governorate!.Name));
+
+            CreateMap<AreaFormViewModel, Area>().ReverseMap().ForMember(dest => dest.Governorates, opt => opt.Ignore());
+            ;
             CreateMap<Area, SelectListItem>()
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
+
 
             //Subscribers
             CreateMap<Subscriber, SubscriberFormViewModel>().ReverseMap();

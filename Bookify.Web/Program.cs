@@ -1,7 +1,3 @@
-using Bookify.Web.Tasks;
-using Hangfire.Dashboard;
-using ViewToHTML.Extensions;
-
 namespace Bookify.Web
 {
     public class Program
@@ -58,6 +54,10 @@ namespace Bookify.Web
                 ));
             builder.Services.AddViewToHTML();
 
+            //Add Serilog
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+            builder.Host.UseSerilog();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -71,6 +71,19 @@ namespace Bookify.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseExceptionHandler("/Home/Error");
+
+            //app.UseStatusCodePages(async statusCodeContext =>
+            //{
+            //	// using static System.Net.Mime.MediaTypeNames;
+            //	statusCodeContext.HttpContext.Response.ContentType = System.Net.Mime.MediaTypeNames.Text.Plain;
+
+            //	await statusCodeContext.HttpContext.Response.WriteAsync(
+            //		$"Status Code Page: {statusCodeContext.HttpContext.Response.StatusCode}");
+            //});
+
+            //app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
+            app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
 
             app.UseHttpsRedirection();
             app.UseRouting();

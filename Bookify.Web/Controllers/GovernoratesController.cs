@@ -1,9 +1,6 @@
-﻿
-using Bookify.Web.Core.Models;
-
-namespace Bookify.Web.Controllers
+﻿namespace Bookify.Web.Controllers
 {
-    [Authorize(Roles = AppRoles.Archive)]
+   [Authorize(Roles = AppRoles.Archive)]
     public class GovernoratesController (ApplicationDbContext context, IMapper mapper) : Controller
     {
         private readonly ApplicationDbContext _context = context;
