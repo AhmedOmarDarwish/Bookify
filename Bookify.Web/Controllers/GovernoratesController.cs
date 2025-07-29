@@ -1,7 +1,7 @@
 ﻿namespace Bookify.Web.Controllers
 {
-   [Authorize(Roles = AppRoles.Archive)]
-    public class GovernoratesController (ApplicationDbContext context, IMapper mapper) : Controller
+    [Authorize(Roles = AppRoles.Archive)]
+    public class GovernoratesController(ApplicationDbContext context, IMapper mapper) : Controller
     {
         private readonly ApplicationDbContext _context = context;
         private readonly IMapper _mapper = mapper;
@@ -31,7 +31,7 @@
                 return BadRequest();
 
             var governorate = _mapper.Map<Governorate>(model);
-            governorate.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            governorate.CreatedById = User.GetUserId();
             _context.Add(governorate);
             _context.SaveChanges();
 
@@ -68,7 +68,7 @@
 
             governorate = _mapper.Map(model, governorate);
             governorate.LastUpdatedOn = DateTime.Now;
-            governorate.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            governorate.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
 
@@ -88,7 +88,7 @@
 
             governorate.IsDeleted = !governorate.IsDeleted;
             governorate.LastUpdatedOn = DateTime.Now;
-            governorate.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            governorate.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
 

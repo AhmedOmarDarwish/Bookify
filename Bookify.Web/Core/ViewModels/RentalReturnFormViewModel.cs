@@ -15,8 +15,8 @@ namespace Bookify.Web.Core.ViewModels
 
         public bool AllowExtend { get; set; }
 
-        public int TotalDelayInDays 
-        { 
+        public int TotalDelayInDays
+        {
             get
             {
                 return Copies.Sum(c => c.DelayInDays);

@@ -9,8 +9,8 @@
         public DateTime? ReturnDate { get; set; }
         public DateTime? ExtendedOn { get; set; }
 
-        public int DelayInDays 
-        { 
+        public int DelayInDays
+        {
             get
             {
                 var delay = 0;

@@ -10,6 +10,6 @@
 
         public IEnumerable<BookCopyViewModel> CurrentCopies { get; set; } = new List<BookCopyViewModel>();
 
-        public int? MaxAllowedCopies {  get; set; }
+        public int? MaxAllowedCopies { get; set; }
     }
 }

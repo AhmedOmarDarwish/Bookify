@@ -1,6 +1,6 @@
 ﻿namespace Bookify.Web.Core.ViewModels
 {
-    public class AuthorViewModel:BaseModel
+    public class AuthorViewModel : BaseModel
     {
         public int Id { get; set; }
 

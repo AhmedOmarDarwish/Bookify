@@ -1,6 +1,6 @@
 ﻿namespace Bookify.Web.Controllers
 {
-    [Authorize(Roles= AppRoles.Admin)]
+    [Authorize(Roles = AppRoles.Admin)]
 
     public class ReportsController : Controller
     {

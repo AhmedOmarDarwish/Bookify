@@ -2,19 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Bookify.Web.Core.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using CloudinaryDotNet;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Bookify.Web.Areas.Identity.Pages.Account
 {
@@ -83,7 +74,7 @@ namespace Bookify.Web.Areas.Identity.Pages.Account
                     {"url", $"{HtmlEncoder.Default.Encode(callbackUrl!)}"},
                     {"linkTitle", "Reset Password"},
                 };
-                
+
                 var body = _emailBodyBuilder.GetEmailBody(
                     EmailTemplates.Email,
                     placeholders

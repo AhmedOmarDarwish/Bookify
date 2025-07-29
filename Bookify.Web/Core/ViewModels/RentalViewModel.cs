@@ -8,7 +8,7 @@
         public DateTime CreatedOn { get; set; }
         public bool PenaltyPaid { get; set; }
         public IEnumerable<RentalCopyViewModel> RentalCopies { get; set; } = new List<RentalCopyViewModel>();
-        
+
         public int TotalDelayInDays
         {
             get
@@ -22,7 +22,7 @@
             get
             {
                 return RentalCopies.Count();
-            } 
+            }
         }
     }
 }

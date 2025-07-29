@@ -32,7 +32,7 @@
                 return PartialView("_Form", PopulateViewModel());
 
             var area = _mapper.Map<Area>(model);
-            area.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            area.CreatedById = User.GetUserId();
             _context.Add(area);
             _context.SaveChanges();
 
@@ -72,7 +72,7 @@
 
             area = _mapper.Map(model, area);
             area.LastUpdatedOn = DateTime.Now;
-            area.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            area.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
             _context.Entry(area).Reference(a => a.Governorate).Load();
@@ -93,7 +93,7 @@
 
             area.IsDeleted = !area.IsDeleted;
             area.LastUpdatedOn = DateTime.Now;
-            area.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            area.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
 

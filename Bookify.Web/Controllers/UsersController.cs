@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
-using System.Text.Encodings.Web;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Bookify.Web.Controllers
 {
@@ -54,13 +54,13 @@ namespace Bookify.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-             
+
             ApplicationUser user = new()
             {
                 FullName = model.FullName,
                 UserName = model.UserName,
                 Email = model.Email,
-                CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value
+                CreatedById = User.GetUserId()
             };
 
             var result = await _userManager.CreateAsync(user, model.Password!);
@@ -139,7 +139,7 @@ namespace Bookify.Web.Controllers
                 return NotFound();
 
             user = _mapper.Map(model, user);
-            user.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            user.LastUpdatedById = User.GetUserId();
             user.LastUpdatedOn = DateTime.Now;
 
             var result = await _userManager.UpdateAsync(user);
@@ -195,7 +195,7 @@ namespace Bookify.Web.Controllers
 
             if (result.Succeeded)
             {
-                user.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                user.LastUpdatedById = User.GetUserId();
                 user.LastUpdatedOn = DateTime.Now;
 
                 await _userManager.UpdateAsync(user);
@@ -220,12 +220,12 @@ namespace Bookify.Web.Controllers
                 return NotFound();
 
             user.IsDeleted = !user.IsDeleted;
-            user.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            user.LastUpdatedById = User.GetUserId();
             user.LastUpdatedOn = DateTime.Now;
 
             await _userManager.UpdateAsync(user);
 
-            if(user.IsDeleted)
+            if (user.IsDeleted)
                 await _userManager.UpdateSecurityStampAsync(user);
 
             return Ok(user.LastUpdatedOn.ToString());
@@ -237,11 +237,11 @@ namespace Bookify.Web.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if(user is null)
+            if (user is null)
                 return NotFound();
             var isLocked = await _userManager.IsLockedOutAsync(user);
 
-            if(isLocked)
+            if (isLocked)
                 await _userManager.SetLockoutEndDateAsync(user, null);
 
             return Ok();
@@ -262,6 +262,6 @@ namespace Bookify.Web.Controllers
 
             return Json(isAllowed);
         }
-    } 
+    }
 }
 

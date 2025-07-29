@@ -108,7 +108,7 @@
 
             subscriber.ImageUrl = $"{imagePath}/{imageName}";
             subscriber.ImageThumbnailUrl = $"{imagePath}/thumb/{imageName}";
-            subscriber.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            subscriber.CreatedById = User.GetUserId();
 
             Subscription subscription = new()
             {
@@ -222,7 +222,7 @@
             }
 
             subscriber = _mapper.Map(model, subscriber);
-            subscriber.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            subscriber.LastUpdatedById = User.GetUserId();
             subscriber.LastUpdatedOn = DateTime.Now;
 
             _context.SaveChanges();
@@ -259,7 +259,7 @@
 
             Subscription newSubscription = new()
             {
-                CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value,
+                CreatedById = User.GetUserId(),
                 CreatedOn = DateTime.Now,
                 StartDate = startDate,
                 EndDate = startDate.AddYears(1),

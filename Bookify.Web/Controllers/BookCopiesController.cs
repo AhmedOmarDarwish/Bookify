@@ -20,8 +20,8 @@
             if (book is null)
                 return NotFound();
 
-            var viewModel = new BookCopyFormViewModel 
-            { 
+            var viewModel = new BookCopyFormViewModel
+            {
                 BookId = bookId,
                 ShowRentalInput = book.IsAvailableForRental
             };
@@ -45,7 +45,7 @@
             {
                 EditionNumber = model.EditionNumber,
                 IsAvailableForRental = book.IsAvailableForRental && model.IsAvailableForRental,
-                CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value
+                CreatedById = User.GetUserId()
             };
 
             book.Copies.Add(copy);
@@ -85,7 +85,7 @@
             copy.EditionNumber = model.EditionNumber;
             copy.IsAvailableForRental = copy.Book!.IsAvailableForRental && model.IsAvailableForRental;
             copy.LastUpdatedOn = DateTime.Now;
-            copy.CreatedById =  User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            copy.CreatedById = User.GetUserId();
 
             _context.SaveChanges();
 
@@ -119,7 +119,7 @@
 
             copy.IsDeleted = !copy.IsDeleted;
             copy.LastUpdatedOn = DateTime.Now;
-            copy.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            copy.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
 

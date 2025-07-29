@@ -1,6 +1,4 @@
-﻿using Bookify.Web.Core.Models;
-
-namespace Bookify.Web.Controllers
+﻿namespace Bookify.Web.Controllers
 {
     [Authorize(Roles = AppRoles.Reception)]
     public class RentalsController : Controller
@@ -58,7 +56,7 @@ namespace Bookify.Web.Controllers
                 MaxAllowedCopies = maxAllowedCopies
             };
 
-            return View("Form",viewModel);
+            return View("Form", viewModel);
         }
 
         [HttpPost]
@@ -118,7 +116,7 @@ namespace Bookify.Web.Controllers
             Rental rental = new()
             {
                 RentalCopies = copies,
-                CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value
+                CreatedById = User.GetUserId()
             };
 
             subscriber.Rentals.Add(rental);
@@ -270,7 +268,7 @@ namespace Bookify.Web.Controllers
             if (isUpdated)
             {
                 rental.LastUpdatedOn = DateTime.Now;
-                rental.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                rental.LastUpdatedById = User.GetUserId();
                 rental.PenaltyPaid = model.PenaltyPaid;
 
                 _context.SaveChanges();
@@ -318,7 +316,7 @@ namespace Bookify.Web.Controllers
 
             rental.IsDeleted = true;
             rental.LastUpdatedOn = DateTime.Now;
-            rental.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            rental.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
 

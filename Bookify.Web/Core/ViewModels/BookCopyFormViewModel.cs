@@ -9,7 +9,7 @@
         public bool IsAvailableForRental { get; set; } = true;
 
         [Display(Name = "Edition Number"),
-            Range(1,1000, ErrorMessage = Errors.InvalidRange)]
+            Range(1, 1000, ErrorMessage = Errors.InvalidRange)]
         public int EditionNumber { get; set; }
 
         public bool ShowRentalInput { get; set; }

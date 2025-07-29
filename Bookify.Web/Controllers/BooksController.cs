@@ -132,7 +132,7 @@
                 //book.ImagePublicId = result.PublicId;
             }
 
-            book.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            book.CreatedById = User.GetUserId();
 
             foreach (var category in model.SelectedCategories)
                 book.Categories.Add(new BookCategory { CategoryId = category });
@@ -219,7 +219,7 @@
             }
 
             book = _mapper.Map(model, book);
-            book.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            book.LastUpdatedById = User.GetUserId();
             book.LastUpdatedOn = DateTime.Now;
             //book.ImageThumbnailUrl = GetThumbnailUrl(book.ImageUrl!);
             //book.ImagePublicId = imagePublicId;
@@ -246,7 +246,7 @@
                 return NotFound();
 
             book.IsDeleted = !book.IsDeleted;
-            book.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            book.LastUpdatedById = User.GetUserId();
             book.LastUpdatedOn = DateTime.Now;
 
             _context.SaveChanges();

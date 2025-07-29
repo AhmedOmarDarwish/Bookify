@@ -31,7 +31,7 @@
                 return BadRequest();
 
             var category = _mapper.Map<Category>(model);
-            category.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            category.CreatedById = User.GetUserId();
             _context.Add(category);
             _context.SaveChanges();
 
@@ -68,7 +68,7 @@
 
             category = _mapper.Map(model, category);
             category.LastUpdatedOn = DateTime.Now;
-            category.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            category.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
 
@@ -88,7 +88,7 @@
 
             category.IsDeleted = !category.IsDeleted;
             category.LastUpdatedOn = DateTime.Now;
-            category.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            category.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
 

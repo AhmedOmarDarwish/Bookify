@@ -14,7 +14,7 @@
         public string Publisher { get; set; } = null!;
 
         [Display(Name = "Publishing Date")]
-       // [AssertThat("PublishingDate <= Today()", ErrorMessage = Errors.NotAllowFutureDates)]
+        // [AssertThat("PublishingDate <= Today()", ErrorMessage = Errors.NotAllowFutureDates)]
         public DateTime PublishingDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Book Cover")]

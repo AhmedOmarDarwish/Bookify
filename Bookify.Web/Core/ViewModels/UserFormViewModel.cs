@@ -17,7 +17,7 @@
         [Remote("AllowEmail", null!, AdditionalFields = "Id", ErrorMessage = Errors.Duplicated)]
         public string Email { get; set; } = null!;
 
-        [DataType(DataType.Password), 
+        [DataType(DataType.Password),
             StringLength(100, ErrorMessage = Errors.MaxMinLength, MinimumLength = 8),
             RegularExpression(RegexPatterns.Password, ErrorMessage = Errors.WeakPassword)]
         [RequiredIf("Id == null", ErrorMessage = Errors.RequiredField)]

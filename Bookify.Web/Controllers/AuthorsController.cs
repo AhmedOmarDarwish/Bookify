@@ -31,7 +31,7 @@
                 return BadRequest();
 
             var author = _mapper.Map<Author>(model);
-            author.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            author.CreatedById = User.GetUserId();
             _context.Add(author);
             _context.SaveChanges();
 
@@ -67,7 +67,7 @@
                 return NotFound();
 
             author = _mapper.Map(model, author);
-            author.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            author.LastUpdatedById = User.GetUserId();
             author.LastUpdatedOn = DateTime.Now;
 
             _context.SaveChanges();
@@ -88,7 +88,7 @@
 
             author.IsDeleted = !author.IsDeleted;
             author.LastUpdatedOn = DateTime.Now;
-            author.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            author.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
 

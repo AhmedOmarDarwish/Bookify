@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Bookify.Web.Core.Models
+﻿namespace Bookify.Web.Core.Models
 {
     [Index(nameof(Title), nameof(AuthorId), IsUnique = true)]
 
@@ -24,14 +22,14 @@ namespace Bookify.Web.Core.Models
 
         //For Image In Cloudinary
         public string? ImagePublicId { get; set; }
-         
+
 
         [MaxLength(50)]
         public string Hall { get; set; } = null!;
 
         public bool IsAvailableForRental { get; set; }
 
-     
+
         public int AuthorId { get; set; }
         public Author? Author { get; set; }
 
