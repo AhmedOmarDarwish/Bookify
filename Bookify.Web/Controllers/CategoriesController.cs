@@ -1,9 +1,9 @@
 ﻿namespace Bookify.Web.Controllers
 {
     [Authorize(Roles = AppRoles.Archive)]
-    public class CategoriesController(ApplicationDbContext context, IMapper mapper) : Controller
+    public class CategoriesController(IApplicationDbContext context, IMapper mapper) : Controller
     {
-        private readonly ApplicationDbContext _context = context;
+        private readonly IApplicationDbContext _context = context;
         private readonly IMapper _mapper = mapper;
 
         [HttpGet]
@@ -32,7 +32,7 @@
 
             var category = _mapper.Map<Category>(model);
             category.CreatedById = User.GetUserId();
-            _context.Add(category);
+            _context.Categories.Add(category);
             _context.SaveChanges();
 
             var viewModel = _mapper.Map<CategoryViewModel>(category);

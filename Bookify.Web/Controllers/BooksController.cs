@@ -4,7 +4,7 @@
     public class BooksController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly Cloudinary _cloudinary;
         private readonly IImageService _imageService;
@@ -12,7 +12,7 @@
         private List<string> _allowedExtensions = new() { ".jpg", ".jpeg", ".png" };
         private int _maxAllowedSize = 2097152;
 
-        public BooksController(ApplicationDbContext context, IMapper mapper,
+        public BooksController(IApplicationDbContext context, IMapper mapper,
             IWebHostEnvironment webHostEnvironment, IOptions<CloudinarySettings> cloudinary,
             IImageService imageService)
         {
@@ -137,7 +137,7 @@
             foreach (var category in model.SelectedCategories)
                 book.Categories.Add(new BookCategory { CategoryId = category });
 
-            _context.Add(book);
+            _context.Books.Add(book);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Details), new { id = book.Id });
@@ -227,11 +227,17 @@
             foreach (var category in model.SelectedCategories)
                 book.Categories.Add(new BookCategory { CategoryId = category });
 
-            if (!model.IsAvailableForRental)
-                foreach (var copy in book.Copies)
-                    copy.IsAvailableForRental = false;
+            //.NET 6
+            //if (!model.IsAvailableForRental)
+            //    foreach (var copy in book.Copies)
+            //        copy.IsAvailableForRental = false;
 
             _context.SaveChanges();
+
+            //.NET 7
+            if (!model.IsAvailableForRental)
+                _context.BookCopies.Where(c => c.BookId == book.Id)
+                    .ExecuteUpdate(p => p.SetProperty(c => c.IsAvailableForRental, false));
 
             return RedirectToAction(nameof(Details), new { id = book.Id });
         }

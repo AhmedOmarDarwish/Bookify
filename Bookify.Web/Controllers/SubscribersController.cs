@@ -3,7 +3,7 @@
     [Authorize(Roles = AppRoles.Reception)]
     public class SubscribersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly IDataProtector _dataProtector;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IMapper _mapper;
@@ -13,7 +13,7 @@
         private readonly IEmailBodyBuilder _emailBodyBuilder;
         private readonly IEmailSender _emailSender;
 
-        public SubscribersController(ApplicationDbContext context,
+        public SubscribersController(IApplicationDbContext context,
             IWebHostEnvironment webHostEnvironment,
             IDataProtectionProvider dataProtector,
             IMapper mapper,
@@ -118,7 +118,7 @@
                 EndDate = DateTime.Today.AddYears(1)
             };
             subscriber.Subscriptions.Add(subscription);
-            _context.Add(subscriber);
+            _context.Subscribers.Add(subscriber);
             _context.SaveChanges();
 
             //Send welcome email

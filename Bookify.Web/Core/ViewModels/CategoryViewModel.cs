@@ -1,6 +1,6 @@
 ﻿namespace Bookify.Web.Core.ViewModels
 {
-    public class CategoryViewModel : BaseModel
+    public class CategoryViewModel : BaseEntity
     {
         public int Id { get; set; }
 

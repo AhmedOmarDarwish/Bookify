@@ -3,11 +3,11 @@
     [Authorize(Roles = AppRoles.Reception)]
     public class RentalsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly IDataProtector _dataProtector;
         private readonly IMapper _mapper;
 
-        public RentalsController(ApplicationDbContext context,
+        public RentalsController(IApplicationDbContext context,
             IDataProtectionProvider dataProtector,
             IMapper mapper)
         {

@@ -20,7 +20,7 @@
     </div>
     <div class="mb-5">
         <div class="form-floating mb-2">
-            <select class="form-select js-select2" data-placeholder="Select An Governorate" asp-for="GovernorateId" asp-items="@Model.Governorates">
+            <select class="form-select js-select2" data-placeholder="Select An Governorate" asp-for="GovernorateId" asp-items="@Model!.Governorates">
                 <option value="">Select An Governorate</option>
             </select>
             <label asp-for="GovernorateId"></label>

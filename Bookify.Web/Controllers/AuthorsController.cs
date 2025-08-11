@@ -1,9 +1,9 @@
 ﻿namespace Bookify.Web.Controllers
 {
     [Authorize(Roles = AppRoles.Archive)]
-    public class AuthorsController(ApplicationDbContext context, IMapper mapper) : Controller
+    public class AuthorsController(IApplicationDbContext context, IMapper mapper) : Controller
     {
-        private readonly ApplicationDbContext _context = context;
+        private readonly IApplicationDbContext _context = context;
         private readonly IMapper _mapper = mapper;
 
         [HttpGet]
@@ -32,7 +32,7 @@
 
             var author = _mapper.Map<Author>(model);
             author.CreatedById = User.GetUserId();
-            _context.Add(author);
+            _context.Authors.Add(author);
             _context.SaveChanges();
 
             var viewModel = _mapper.Map<AuthorViewModel>(author);

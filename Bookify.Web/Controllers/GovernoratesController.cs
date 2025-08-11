@@ -1,9 +1,9 @@
 ﻿namespace Bookify.Web.Controllers
 {
     [Authorize(Roles = AppRoles.Archive)]
-    public class GovernoratesController(ApplicationDbContext context, IMapper mapper) : Controller
+    public class GovernoratesController(IApplicationDbContext context, IMapper mapper) : Controller
     {
-        private readonly ApplicationDbContext _context = context;
+        private readonly IApplicationDbContext _context = context;
         private readonly IMapper _mapper = mapper;
 
         [HttpGet]
@@ -32,7 +32,7 @@
 
             var governorate = _mapper.Map<Governorate>(model);
             governorate.CreatedById = User.GetUserId();
-            _context.Add(governorate);
+            _context.Governorates.Add(governorate);
             _context.SaveChanges();
 
             var viewModel = _mapper.Map<GovernorateViewModel>(governorate);

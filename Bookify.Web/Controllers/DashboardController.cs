@@ -1,13 +1,12 @@
-﻿
-namespace Bookify.Web.Controllers
+﻿namespace Bookify.Web.Controllers
 {
     [Authorize]
     public class DashboardController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public DashboardController(ApplicationDbContext context, IMapper mapper)
+        public DashboardController(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

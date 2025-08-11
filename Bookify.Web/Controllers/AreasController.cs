@@ -1,8 +1,9 @@
 ﻿namespace Bookify.Web.Controllers
 {
-    public class AreasController(ApplicationDbContext context, IMapper mapper) : Controller
+    [Authorize(Roles = AppRoles.Archive)]
+    public class AreasController(IApplicationDbContext context, IMapper mapper) : Controller
     {
-        private readonly ApplicationDbContext _context = context;
+        private readonly IApplicationDbContext _context = context;
         private readonly IMapper _mapper = mapper;
 
         [HttpGet]
@@ -33,10 +34,10 @@
 
             var area = _mapper.Map<Area>(model);
             area.CreatedById = User.GetUserId();
-            _context.Add(area);
+            _context.Areas.Add(area);
             _context.SaveChanges();
 
-            _context.Entry(area).Reference(a => a.Governorate).Load();
+            _context.Areas.Entry(area).Reference(a => a.Governorate).Load();
 
             var viewModel = _mapper.Map<AreaViewModel>(area);
 
@@ -75,7 +76,7 @@
             area.LastUpdatedById = User.GetUserId();
 
             _context.SaveChanges();
-            _context.Entry(area).Reference(a => a.Governorate).Load();
+            _context.Areas.Entry(area).Reference(a => a.Governorate).Load();
 
             var viewModel = _mapper.Map<AreaViewModel>(area);
 

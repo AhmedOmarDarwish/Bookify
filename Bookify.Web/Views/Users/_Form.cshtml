@@ -37,7 +37,7 @@
 
     <div class="mb-5">
         <div class="mb-2">
-            <select class="form-select form-select-solid js-select2" data-placeholder="Select roles" asp-for="SelectedRoles" asp-items="@Model.Roles">
+            <select class="form-select form-select-solid js-select2" data-placeholder="Select roles" asp-for="SelectedRoles" asp-items="@Model!.Roles">
                 <option>Select roles</option>
             </select>
         </div>
